@@ -8,13 +8,8 @@ seed-kafka() {
 	python3 seed_kafka.py
 }
 
-# Creates various ddls
-# USAGE: `rw-ddl <ddl-name>`.
-# If no ddl-name is provided, it will create all the DDLs.
-# If ddl-name is provided, it will create the specific DDL.
-rw-ddl() {
-	./rw_ddl.py "$@"
-}
+# TODO: Command to create ALL ddls.
+# TODO: Command + script to send kafka updates.
 
 # Starts the risingwave cluster
 start-cluster() {

@@ -1,3 +1,4 @@
+import psycopg2
 import concurrent.futures
 import pyarrow.parquet as pq
 from confluent_kafka import Producer
@@ -61,9 +62,59 @@ def send_parquet_records(env, parquet_file):
     send_records_to_kafka(env, records)
 
 
+def check_connection(conn):
+    cur = conn.cursor()
+    logging.info('Checking connection to the RisingWave')
+    cur.execute("SELECT version();")
+    result = cur.fetchone()
+    if result is None:
+        logging.error('Connection failed')
+        raise Exception('Connection failed')
+    conn.commit()
+    logging.info(f'RisingWave started with version: {result[0]}')
+
+
 def send_csv_records(env, csv_file):
     records = pandas.read_csv(csv_file)
-    send_records_to_kafka(env, records)
+    # connect to risingwave via psycopg2
+    conn = psycopg2.connect(
+        host="localhost",
+        database="dev",
+        user="root",
+        port=4566,
+    )
+    conn.set_session(autocommit=True)
+    check_connection(conn)
+    # For each record in the csv file, insert it into the database
+    cur = conn.cursor()
+    # Recreate table if it exists
+    cur.execute("DROP TABLE IF EXISTS taxi_zone;")
+    cur.execute(
+        """
+        CREATE TABLE taxi_zone (
+            location_id int,
+            borough text,
+            zone text,
+            service_zone text
+        )
+        """
+    )
+    logging.info('Created taxi_zone table')
+    for i, record in records.iterrows():
+        location_id = record['LocationID']
+        borough = record['Borough']
+        zone = record['Zone']
+        service_zone = record['service_zone']
+        cur.execute(
+            f"""
+            INSERT INTO taxi_zone (location_id, borough, zone, service_zone)
+            VALUES (%s, %s, %s, %s);
+            """,
+            (location_id, borough, zone, service_zone))
+    cur.execute("flush;")
+    conn.commit()
+    conn.close()
+    logging.info(f'Created {len(records)} records in taxi_zone table')
 
 
 def main():
@@ -74,9 +125,7 @@ def main():
     env = Env(conf)
 
     # Load taxi zone data
-    taxi_zone_topic = 'taxi_zone'
     taxi_zone_filepath = 'data/taxi_zone.csv'
-    create_kafka_topic(env, taxi_zone_topic)
     send_csv_records(env, taxi_zone_filepath)
 
     # Load trip data
