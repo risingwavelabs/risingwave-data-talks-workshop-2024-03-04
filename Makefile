@@ -1,4 +1,5 @@
-# Seed kafka from the parquet file
+# Seed trip data from the parquet file
+#
 .PHONY: seed-kafka
 seed-kafka:
 	python3 seed_kafka.py

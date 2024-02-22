@@ -45,7 +45,7 @@ def send_parquet_records(env, parquet_file):
         if i % 100000 == 0:
             logging.info(f"Sent {i} records")
         message = record.to_json()
-        producer.produce('taxi_data', value=message.encode(), key=None)
+        producer.produce('trip_data', value=message.encode(), key=None)
         if i % env.conf["queue.buffering.max.messages"] == 0:
             producer.flush()
     producer.flush()
@@ -59,7 +59,7 @@ def main():
     }
     env = Env(conf)
 
-    topic = 'taxi_data'
+    topic = 'trip_data'
     filepath = 'yellow_tripdata_2022-01.parquet'
 
     create_kafka_topic(env, topic)

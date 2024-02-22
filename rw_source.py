@@ -46,12 +46,12 @@ def check_connection(conn):
     conn.commit()
     logging.info(f'RisingWave started with version: {result}')
 
-def create_source(conn):
+def create_trip_data_source(conn):
     cur = conn.cursor()
     schema = get_schema()
     logging.info('Creating source')
     cur.execute(f"""
-        CREATE TABLE if not exists taxi_data (
+        CREATE TABLE if not exists trip_data (
             -- See: https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_yellow.pdf
             -- Taxicab Technology Service Provider or TPEP
             -- 1= Creative Mobile Technologies, LLC; 2= VeriFone Inc
@@ -109,7 +109,7 @@ def create_source(conn):
             airport_fee numeric
         ) WITH (
             connector='kafka',
-            topic='taxi_data',
+            topic='trip_data',
             properties.bootstrap.server='message_queue:29092'
         ) FORMAT PLAIN ENCODE JSON;
     """)
@@ -118,7 +118,7 @@ def create_source(conn):
     # Wait for table to be populated
     time.sleep(1)
     logging.info('Selecting 1 record from the source')
-    cur.execute("SELECT * FROM taxi_data LIMIT 1;")
+    cur.execute("SELECT * FROM trip_data LIMIT 1;")
     result = cur.fetchone()
     logging.info(f'Selected record: {result}')
     conn.commit()
@@ -131,7 +131,7 @@ def main():
         port=4566,
     )
     check_connection(conn)
-    create_source(conn)
+    create_trip_data_source(conn)
 
 
 if __name__ == "__main__":
