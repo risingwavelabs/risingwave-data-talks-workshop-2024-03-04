@@ -27,18 +27,21 @@ def check_kafka_topic_created(env, topic):
 def create_kafka_topic(env, topic_name):
     admin_client = env.admin_client
     topic = NewTopic(topic=topic_name, num_partitions=8, replication_factor=1)
+
     if check_kafka_topic_created(env, topic_name):
-        logging.warning(f"Topic {topic_name} already exists, deleting it")
+        logging.warning(f'Topic {topic_name} already exists, deleting it')
         admin_client.delete_topics([topic_name])[topic_name].result()
     admin_client.create_topics([topic])[topic_name].result()
 
+    if check_kafka_topic_created(env, topic_name):
+        logging.info(f'Topic {topic_name} created')
+    else:
+        logging.error(f'Topic {topic_name} not created')
+        raise Exception(f'Topic {topic_name} not created')
 
-def send_parquet_records(env, parquet_file):
+
+def send_records_to_kafka(env, records):
     producer = env.producer
-    table = pq.read_table(parquet_file)
-    schema = table.schema
-    records = table.to_pandas()
-
     records_count = len(records)
     logging.info(f"Sending {records_count} records to Kafka")
     for i, (_, record) in enumerate(records.iterrows()):
@@ -52,6 +55,17 @@ def send_parquet_records(env, parquet_file):
     logging.info(f"Sent {records_count} records to Kafka")
 
 
+def send_parquet_records(env, parquet_file):
+    table = pq.read_table(parquet_file)
+    records = table.to_pandas()
+    send_records_to_kafka(env, records)
+
+
+def send_csv_records(env, csv_file):
+    records = pandas.read_csv(csv_file)
+    send_records_to_kafka(env, records)
+
+
 def main():
     conf = {
         'bootstrap.servers': "localhost:9092",
@@ -59,18 +73,17 @@ def main():
     }
     env = Env(conf)
 
-    topic = 'trip_data'
-    filepath = 'yellow_tripdata_2022-01.parquet'
+    # Load taxi zone data
+    taxi_zone_topic = 'taxi_zone'
+    taxi_zone_filepath = 'data/taxi_zone.csv'
+    create_kafka_topic(env, taxi_zone_topic)
+    send_csv_records(env, taxi_zone_filepath)
 
-    create_kafka_topic(env, topic)
-    created = check_kafka_topic_created(env, topic)
-    if created:
-        logging.info(f"Topic {topic} created")
-    else:
-        logging.error(f"Topic {topic} not created")
-        raise Exception(f"Topic {topic} not created")
-
-    send_parquet_records(env, filepath)
+    # Load trip data
+    trip_data_topic = 'trip_data'
+    trip_data_filepath = 'data/yellow_tripdata_2022-01.parquet'
+    create_kafka_topic(env, trip_data_topic)
+    send_parquet_records(env, trip_data_filepath)
 
 
 main()

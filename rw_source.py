@@ -29,7 +29,7 @@ logging.root.setLevel(logging.INFO)
 # congestion_surcharge: double
 # airport_fee: double
 def get_schema():
-    filepath = 'yellow_tripdata_2022-01.parquet'
+    filepath = 'data/yellow_tripdata_2022-01.parquet'
     table = pq.read_table(filepath)
     return table.schema
 
