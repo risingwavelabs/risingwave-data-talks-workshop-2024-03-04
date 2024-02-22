@@ -18,3 +18,18 @@ rw-source:
 .PHONY: rw-mv
 rw-mv:
 	./rw_mv.py
+
+# Start cluster
+.PHONY: start-cluster
+start-cluster:
+	docker-compose -f docker/docker-compose.yml up -d
+
+# Stop cluster
+.PHONY: stop-cluster
+stop-cluster:
+	docker-compose -f docker/docker-compose.yml down
+
+# Stop and clean cluster volumes
+.PHONY: clean-cluster
+clean-cluster:
+	docker-compose -f docker/docker-compose.yml down -v
