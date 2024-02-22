@@ -31,7 +31,6 @@ def create_kafka_topic(env, topic_name):
         logging.warning(f"Topic {topic_name} already exists, deleting it")
         admin_client.delete_topics([topic_name])[topic_name].result()
     admin_client.create_topics([topic])[topic_name].result()
-    logging.info(f"Topic {topic_name} created")
 
 
 def send_parquet_records(env, parquet_file):
