@@ -269,6 +269,7 @@ services:
     restart: always
 
   clickhouse:
+    container_name: clickhouse
     image: clickhouse/clickhouse-server
     environment:
       - CLICKHOUSE_ADMIN_PASSWORD=
