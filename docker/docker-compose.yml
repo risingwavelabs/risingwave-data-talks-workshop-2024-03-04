@@ -267,6 +267,14 @@ services:
       timeout: 5s
       retries: 5
     restart: always
+
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    environment:
+      - CLICKHOUSE_ADMIN_PASSWORD=
+    ports:
+      - '8123:8123'
+
 volumes:
   etcd-0:
     external: false
@@ -277,4 +285,6 @@ volumes:
   prometheus-0:
     external: false
   message_queue:
+    external: false
+  clickhouse:
     external: false
