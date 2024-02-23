@@ -12,5 +12,5 @@ WITH (
     clickhouse.user = '',
     clickhouse.password = '',
     clickhouse.database = 'default',
-    clickhouse.table='demo_test'
+    clickhouse.table='demo_test',
 );
