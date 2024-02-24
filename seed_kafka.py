@@ -5,12 +5,10 @@ import random
 import sys
 
 import psycopg2
-import concurrent.futures
 import pyarrow.parquet as pq
 from confluent_kafka import Producer
 from confluent_kafka.admin import AdminClient, NewTopic
 import pandas
-import socket
 import time
 import logging
 
@@ -134,7 +132,7 @@ def send_csv_records(env, csv_file):
         zone = record['Zone']
         service_zone = record['service_zone']
         cur.execute(
-            f"""
+            """
             INSERT INTO taxi_zone (location_id, borough, zone, service_zone)
             VALUES (%s, %s, %s, %s);
             """,
