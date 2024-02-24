@@ -6,7 +6,16 @@ We will use RisingWave to ingest the data, process it in real-time, and store th
 
 ## Project Overview
 
+![project](./assets/project.png)
 
+We will cover the following topics in this workshop:
+1. What is RisingWave?
+2. How to set up a RisingWave cluster with Docker Compose.
+3. How to ingest data into RisingWave using Kafka.
+4. Using `psycopg2` to connect to RisingWave and run SQL queries.
+5. Stream Processing with Materialized Views in RisingWave.
+6. Simple Batch Query Serving with RisingWave.
+7. How to sink data from RisingWave to Clickhouse.
 
 ## Prerequisites
 
@@ -32,7 +41,7 @@ In this workshop, we will replace the `timestamp` fields in the `trip_data` with
 That's because `yellow_tripdata_2022-01.parquet` contains historical data from 2022,
 and we want to simulate processing real-time data.
 
-## Project Overview
+## Project Structure
 
 ```plaintext
 noelkwan@Noels-MacBook-Pro risingwave-taxi % tree -L 1
