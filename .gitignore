@@ -1,3 +1,6 @@
 activate/
 venv/
 dashboards/
+grafana*
+prometheus*
+
