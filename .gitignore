@@ -1,6 +1,7 @@
 activate/
-venv/
+.venv/
 dashboards/
 grafana*
 prometheus*
+risingwave.toml
 
