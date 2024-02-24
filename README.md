@@ -9,13 +9,13 @@ We will use RisingWave to ingest the data, process it in real-time, and store th
 ![project](./assets/project.png)
 
 We will cover the following topics in this workshop:
-1. What is RisingWave?
-2. How to set up a RisingWave cluster with Docker Compose.
-3. How to ingest data into RisingWave using Kafka.
-4. Using `psycopg2` to connect to RisingWave and run SQL queries.
-5. Stream Processing with Materialized Views in RisingWave.
-6. Simple Batch Query Serving with RisingWave.
-7. How to sink data from RisingWave to Clickhouse.
+- What is RisingWave?
+- How to set up a RisingWave cluster with Docker Compose.
+- How to ingest data into RisingWave using Kafka.
+- Using `psycopg2` to connect to RisingWave and run SQL queries.
+- Stream Processing with Materialized Views in RisingWave.
+- Simple Batch Query Serving with RisingWave.
+- How to sink data from RisingWave to Clickhouse.
 
 ## Prerequisites
 
