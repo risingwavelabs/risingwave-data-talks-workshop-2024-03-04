@@ -52,6 +52,10 @@ def send_records_to_kafka(env, records, real_time=False):
     records_count = len(records)
     logging.info(f"Sending {records_count} records to Kafka")
     for i, (_, record) in enumerate(records.iterrows()):
+        # Limit historical data to 100000 records, since cluster resource may be limited.
+        if not real_time and i >= 100000:
+            break
+
         if i == 0:
             logging.debug("tpep_pickup_datetime", record['tpep_pickup_datetime'])
             logging.debug("tpep_dropoff_datetime", record['tpep_dropoff_datetime'])
@@ -142,7 +146,7 @@ def send_csv_records(env, csv_file):
 
 
 def main():
-    update = sys.argv[1] == "update"
+    update = len(sys.argv) >= 2 and sys.argv[1] == "update"
     conf = {
         'bootstrap.servers': "localhost:9092",
         "queue.buffering.max.messages": 1000000
