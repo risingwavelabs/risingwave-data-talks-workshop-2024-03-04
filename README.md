@@ -43,7 +43,7 @@ and we want to simulate processing real-time data.
 ## Project Structure
 
 ```plaintext
-noelkwan@Noels-MacBook-Pro risingwave-taxi % tree -L 1
+$ tree -L 1
 .
 ├── README.md                   # This file
 ├── clickhouse-sql              # SQL scripts for Clickhouse
