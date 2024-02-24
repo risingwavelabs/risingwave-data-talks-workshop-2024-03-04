@@ -38,6 +38,7 @@ clickhouse-client() {
   docker exec -i clickhouse clickhouse-client
 }
 
+# Starts an interactive clickhouse session.
 clickhouse-client-term() {
   docker exec -it clickhouse clickhouse-client
 }

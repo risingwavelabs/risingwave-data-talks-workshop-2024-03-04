@@ -73,4 +73,9 @@ start-cluster
 # Setup python
 python3 -m venv .venv
 source .venv/bin/activate
+pip install -r requirements.txt
 ```
+
+`commands.sh` contains several commands to operate the cluster. You may reference it to see what commands are available.
+
+Now you're ready to start on the [workshop](./workshop.md)!

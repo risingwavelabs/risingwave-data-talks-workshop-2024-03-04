@@ -4,4 +4,4 @@ dashboards/
 grafana*
 prometheus*
 risingwave.toml
-**/*.hw.sql
+homework/
