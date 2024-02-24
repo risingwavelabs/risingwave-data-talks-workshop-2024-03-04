@@ -1,5 +1,5 @@
--- Get the latest 1 hour pickup count from JFK airport in Queens.
--- Break it down
+-- Question:
+-- From 1 hour the last pickup time, how many pickups are there from JFK airport in Queens?
 CREATE MATERIALIZED VIEW airport_pu_1hr AS
 WITH max_time_t AS (
     SELECT

@@ -3,6 +3,8 @@
 --
 -- Question we want to answer:
 -- How does avg_fare_amt change relative to number of rides per hour?
+--
+-- Hint:
 -- Can use sliding windows to answer this question.
 -- 1. Get number of rides
 -- 2. Get avg_fare_amt
@@ -14,7 +16,7 @@ SELECT
     window_start,
     window_end
 FROM
-    TUMBLE(trip_data, tpep_pickup_datetime, INTERVAL '1' HOUR)
+    HOP(trip_data, tpep_pickup_datetime, INTERVAL '1' MINUTE , INTERVAL '1' HOUR)
 GROUP BY
     window_start, window_end
 ORDER BY

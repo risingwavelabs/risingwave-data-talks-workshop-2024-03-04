@@ -1,0 +1,4 @@
+-- Homework:
+-- From the latest pickup time to 1 hour before, what are the top 10 busiest zones in terms of number of pickups?
+-- For example if the latest pickup time is 2020-01-01 12:00:00,
+-- then the query should return the top 10 busiest zones from 2020-01-01 11:00:00 to 2020-01-01 12:00:00.
