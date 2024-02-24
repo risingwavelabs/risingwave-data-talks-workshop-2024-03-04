@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+
+import datetime
+import random
+import sys
+
 import psycopg2
 import concurrent.futures
 import pyarrow.parquet as pq
@@ -41,25 +47,43 @@ def create_kafka_topic(env, topic_name):
         raise Exception(f'Topic {topic_name} not created')
 
 
-def send_records_to_kafka(env, records):
+def send_records_to_kafka(env, records, real_time=False):
     producer = env.producer
     records_count = len(records)
     logging.info(f"Sending {records_count} records to Kafka")
     for i, (_, record) in enumerate(records.iterrows()):
-        if i % 100000 == 0:
-            logging.info(f"Sent {i} records")
+        if i == 0:
+            logging.debug("tpep_pickup_datetime", record['tpep_pickup_datetime'])
+            logging.debug("tpep_dropoff_datetime", record['tpep_dropoff_datetime'])
+
+        if real_time:
+
+            tpep_interval = record['tpep_dropoff_datetime'] - record['tpep_pickup_datetime']
+            tpep_dropoff_datetime = datetime.datetime.now(datetime.UTC)
+            tpep_pickup_datetime = tpep_dropoff_datetime - tpep_interval
+            record['tpep_pickup_datetime'] = tpep_pickup_datetime
+            record['tpep_dropoff_datetime'] = tpep_dropoff_datetime
+            time.sleep(random.randrange(0, 1000) / 1000)
+            if i % 10 == 0:
+                logging.info(f"Sent {i} records")
+
         message = record.to_json()
+
         producer.produce('trip_data', value=message.encode(), key=None)
         if i % env.conf["queue.buffering.max.messages"] == 0:
             producer.flush()
+
+        if i % 100000 == 0:
+            logging.info(f"Sent {i} records")
+
     producer.flush()
     logging.info(f"Sent {records_count} records to Kafka")
 
 
-def send_parquet_records(env, parquet_file):
+def send_parquet_records(env, parquet_file, real_time=False):
     table = pq.read_table(parquet_file)
     records = table.to_pandas()
-    send_records_to_kafka(env, records)
+    send_records_to_kafka(env, records, real_time)
 
 
 def check_connection(conn):
@@ -88,7 +112,7 @@ def send_csv_records(env, csv_file):
     # For each record in the csv file, insert it into the database
     cur = conn.cursor()
     # Recreate table if it exists
-    cur.execute("DROP TABLE IF EXISTS taxi_zone;")
+    cur.execute("DROP TABLE IF EXISTS taxi_zone CASCADE;")
     cur.execute(
         """
         CREATE TABLE taxi_zone (
@@ -118,6 +142,7 @@ def send_csv_records(env, csv_file):
 
 
 def main():
+    update = sys.argv[1] == "update"
     conf = {
         'bootstrap.servers': "localhost:9092",
         "queue.buffering.max.messages": 1000000
@@ -125,14 +150,21 @@ def main():
     env = Env(conf)
 
     # Load taxi zone data
+    logging.info('Loading taxi zone data')
     taxi_zone_filepath = 'data/taxi_zone.csv'
     send_csv_records(env, taxi_zone_filepath)
 
     # Load trip data
+    logging.info('Loading trip data')
     trip_data_topic = 'trip_data'
     trip_data_filepath = 'data/yellow_tripdata_2022-01.parquet'
     create_kafka_topic(env, trip_data_topic)
-    send_parquet_records(env, trip_data_filepath)
+
+    if update:
+        logging.info('Starting real time updates')
+    else:
+        logging.info('Sending historical data')
+    send_parquet_records(env, trip_data_filepath, real_time=update)
 
 
 main()

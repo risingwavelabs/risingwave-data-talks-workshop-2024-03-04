@@ -5,7 +5,12 @@ export PGDATABASE=dev
 
 # Seed trip data from the parquet file
 seed-kafka() {
-	python3 seed_kafka.py
+	./seed_kafka.py
+}
+
+# Seed trip data from the parquet file
+stream-kafka() {
+	./seed_kafka.py update
 }
 
 # TODO: Command to create ALL ddls.
