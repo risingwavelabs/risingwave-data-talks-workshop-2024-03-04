@@ -1,8 +1,7 @@
 # Stream Processing NYC Taxi Data with RisingWave
 
-In this tutorial, we will show you how to use RisingWave to process NYC Taxi data in real-time.
+In this Workshop, we will show you how to use RisingWave to process NYC Taxi data in real-time.
 We will use the NYC Taxi dataset, which contains information about taxi trips in New York City.
-We will use RisingWave to ingest the data, process it in real-time, and store the results in a Clickhouse database.
 
 ## Project Overview
 
