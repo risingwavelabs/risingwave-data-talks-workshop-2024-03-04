@@ -1,2 +1,0 @@
--- Homework:
--- What is the current avg_trip_time?
