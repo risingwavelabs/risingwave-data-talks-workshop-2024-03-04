@@ -1,4 +1,3 @@
-<div>
 <p align="center">
   <picture>
     <source srcset="https://github.com/risingwavelabs/risingwave/blob/main/.github/RisingWave-logo-dark.svg" width="500px" media="(prefers-color-scheme: dark)">
