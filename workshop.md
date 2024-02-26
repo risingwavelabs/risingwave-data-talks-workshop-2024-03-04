@@ -1,5 +1,7 @@
 # Stream Processing in SQL with RisingWave
 
+![project](./assets/project.png)
+
 Before beginning on this section, make sure you have setup your environment according to the [README](./README.md).
 
 ## What is RisingWave?

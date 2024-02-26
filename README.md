@@ -1,20 +1,74 @@
-# Stream Processing NYC Taxi Data with RisingWave
+<div>
+<p align="center">
+  <picture>
+    <source srcset="https://github.com/risingwavelabs/risingwave/blob/main/.github/RisingWave-logo-dark.svg" width="500px" media="(prefers-color-scheme: dark)">
+    <img src="https://github.com/risingwavelabs/risingwave/blob/main/.github/RisingWave-logo-light.svg" width="500px">
+  </picture>
+</p>
 
-In this Workshop, we will show you how to use RisingWave to process NYC Taxi data in real-time.
-We will use the NYC Taxi dataset, which contains information about taxi trips in New York City.
 
-## Project Overview
+</div>
 
-![project](./assets/project.png)
+<p align="center">
+  <a
+    href="https://docs.risingwave.com/"
+    target="_blank"
+  ><b>Documentation</b></a>&nbsp;&nbsp;&nbsp;📑&nbsp;&nbsp;&nbsp;
+  <a
+    href="https://tutorials.risingwave.com/"
+    target="_blank"
+  ><b>Hands-on Tutorials</b></a>&nbsp;&nbsp;&nbsp;🎯&nbsp;&nbsp;&nbsp;
+  <a
+    href="https://cloud.risingwave.com/"
+    target="_blank"
+  ><b>RisingWave Cloud</b></a>&nbsp;&nbsp;&nbsp;🚀&nbsp;&nbsp;&nbsp;
+  <a
+    href="https://risingwave.com/slack"
+    target="_blank"
+  >
+    <b>Get Instant Help</b>
+  </a>
+</p>
+<div align="center">
+  <a
+    href="https://risingwave.com/slack"
+    target="_blank"
+  >
+    <img alt="Slack" src="https://badgen.net/badge/Slack/Join%20RisingWave/0abd59?icon=slack" />
+  </a>
+  <a
+    href="https://twitter.com/risingwavelabs"
+    target="_blank"
+  >
+    <img alt="X" src="https://img.shields.io/twitter/follow/risingwavelabs" />
+  </a>
+  <a
+    href="https://www.youtube.com/@risingwave-labs"
+    target="_blank"
+  >
+    <img alt="YouTube" src="https://img.shields.io/youtube/channel/views/UCsHwdyBRxBpmkA5RRd0YNEA" />
+  </a>
+</div>
 
-We will cover the following topics in this workshop:
-- What is RisingWave?
-- How to set up a RisingWave cluster with Docker Compose.
-- How to ingest data into RisingWave using Kafka.
-- Using `psycopg2` to connect to RisingWave and run SQL queries.
-- Stream Processing with Materialized Views in RisingWave.
-- Simple Batch Query Serving with RisingWave.
-- How to sink data from RisingWave to Clickhouse.
+## Stream processing in SQL with RisingWave
+
+In this hands-on workshop, we’ll learn how to process real-time streaming data using SQL in RisingWave. The system we’ll use is [RisingWave](https://github.com/risingwavelabs/risingwave), an open-source SQL database for processing and managing streaming data. You may not feel unfamiliar with RisingWave’s user experience, as it’s fully wire compatible with PostgreSQL.
+
+![RisingWave](https://raw.githubusercontent.com/risingwavelabs/risingwave-docs/main/docs/images/new_archi_grey.png)
+
+We will use the NYC Taxi dataset, which contains information
+about taxi trips in New York City.
+
+We’ll cover the following topics in this Workshop:
+
+- Why Stream Processing?
+- Stateless computation (Filters, Projections)
+- Stateful Computation (Aggregations, Joins)
+- Time windowing
+- Data Ingestion and Delivery
+
+RisingWave in 10 Minutes:
+https://tutorials.risingwave.com/docs/intro
 
 ## Prerequisites
 
