@@ -54,15 +54,27 @@ CREATE MATERIALIZED VIEW latest_dropoff_time AS
 
 Create a materialized view to compute the average, min and max trip time between each taxi zone.
 
-From this MV, find the taxi zones with the highest average trip time.
+From this MV, find the pair of taxi zones with the highest average trip time.
 You may need to use the [dynamic filter pattern](https://docs.risingwave.com/docs/current/sql-pattern-dynamic-filters/) for this.
 
 Bonus (no marks): Create an MV which can identify anomalies in the data. For example, if the average trip time between two zones is 1 minute,
 but the max trip time is 10 minutes and 20 minutes respectively.
 
+Options:
+1. Yorkville East, Steinway
+2. Murray Hill, Midwood
+3. East Flatbush/Farragut, East Harlem North
+4. Midtown Center, University Heights/Morris Heights
+
 ## Question 2
 
-Recreate the MV(s) in question 1, to also find the number of trips for the taxi zones with the highest average trip time.
+Recreate the MV(s) in question 1, to also find the number of trips for the pair of taxi zones with the highest average trip time.
+
+Options:
+1. 5
+2. 3
+3. 10
+4. 1
 
 ## Question 3
 
@@ -73,13 +85,16 @@ then the query should return the top 10 busiest zones from 2020-01-01 11:00:00 t
 HINT: You can use [dynamic filter pattern](https://docs.risingwave.com/docs/current/sql-pattern-dynamic-filters/)
 to create a filter condition based on the latest pickup time.
 
-NOTE: For this question '17 hours' was picked to ensure we have enough data to work with.
+NOTE: For this question `17 hours` was picked to ensure we have enough data to work with.
 
-## SoS, None of the answers match the expected results.
-
-<details>
-<summary>HINT</summary>
-
-Recall, RisingWave has a batch mode... Perhaps it can be used somehow.
-
-</details>
+Fill in the top 10:
+1. `__________`
+2. `__________`
+3. `__________`
+4. `__________`
+5. `__________`
+6. `__________`
+7. `__________`
+8. `__________`
+9. `__________`
+10. `__________`
