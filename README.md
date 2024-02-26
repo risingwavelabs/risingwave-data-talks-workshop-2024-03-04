@@ -63,7 +63,6 @@ We’ll cover the following topics in this Workshop:
 - Why Stream Processing?
 - Stateless computation (Filters, Projections)
 - Stateful Computation (Aggregations, Joins)
-- Time windowing
 - Data Ingestion and Delivery
 
 RisingWave in 10 Minutes:

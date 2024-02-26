@@ -4,6 +4,10 @@
 
 Before beginning on this section, make sure you have setup your environment according to the [README](./README.md).
 
+## Why Stream Processing?
+
+TODO
+
 ## What is RisingWave?
 
 For this section the content is derived from:
@@ -13,6 +17,18 @@ For this section the content is derived from:
 - https://tutorials.risingwave.com/docs/design/state
 
 Please consult those sections for more details.
+
+## Stateless computation (Filters, Projections)
+
+TODO
+
+## Stateful Computation (Aggregations, Joins)
+
+TODO
+
+## Data Ingestion and Delivery
+
+TODO
 
 ## Setting up RisingWave with Docker Compose
 
