@@ -4,32 +4,6 @@
 
 Before beginning on this section, make sure you have setup your environment according to the [README](./README.md).
 
-## Why Stream Processing?
-
-TODO
-
-## What is RisingWave?
-
-For this section the content is derived from:
-- https://tutorials.risingwave.com/docs/intro
-- https://tutorials.risingwave.com/docs/faq
-- https://tutorials.risingwave.com/docs/design/architecture
-- https://tutorials.risingwave.com/docs/design/state
-
-Please consult those sections for more details.
-
-## Stateless computation (Filters, Projections)
-
-TODO
-
-## Stateful Computation (Aggregations, Joins)
-
-TODO
-
-## Data Ingestion and Delivery
-
-TODO
-
 ## Setting up RisingWave with Docker Compose
 
 Reference: https://docs.risingwave.com/docs/current/risingwave-docker-compose/
@@ -38,7 +12,14 @@ For this workshop, I have slightly modified the `docker-compose.yml` file to inc
 
 The `docker-compose.yml` file is located in the `docker` directory.
 
-The docker-compose file has the following structure ... TODO.
+It contains the following key components:
+- RisingWave (Stream Processing)
+- Clickhouse (Downstream Delivery)
+- Redpanda (Upstream Ingestion)
+- Grafana (Visualization)
+- Prometheus (Metrics)
+- MinIO (Storage)
+- Etcd (Metadata Storage)
 
 ## Ingesting Data into RisingWave using Kafka
 
@@ -46,18 +27,18 @@ Reference: https://docs.risingwave.com/docs/current/ingest-from-kafka/
 
 The `seed_kafka.py` file contains the logic to process the data and populate RisingWave.
 
-TODO: Explain logic in `seed_kafka.py`.
+Here we:
+1. Process the `taxi_zone` data and insert it into RisingWave. This is just ingested with DML over `psycog`, since it's a small dataset.
+2. Process the `trip_data` and insert it into RisingWave. This is ingested via Kafka.
 
-## Using `psycopg2` to connect to RisingWave and run SQL queries
-
-Reference: https://docs.risingwave.com/docs/current/python-client-libraries/#connect-to-risingwave
-
-TODO: Explain logic in `seed_kafka.py`
+You may look at their definitions by running:
+```bash
+psql -c 'SHOW TABLES;'
+```
 
 ## Stream Processing with Materialized Views in RisingWave
 
 TODO: Explain each MV
-TODO: Construct the MVs from scratch showing how they can be built.
 
 ## Simple Batch Query Serving with RisingWave
 
@@ -69,7 +50,7 @@ TODO: Explain each sink
 
 ## What's next?
 
-TODO: What's next?
+https://tutorials.risingwave.com/docs/category/basics
 
 ## Homework
 
