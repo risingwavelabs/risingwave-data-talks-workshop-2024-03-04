@@ -341,7 +341,7 @@ ORDER BY
 
 Then we can create a temporal filter to get the longest trips for the last 5 minutes:
 ```sql
-CREATE MATERIALIZED VIEW longest_trip_5min AS SELECT
+CREATE MATERIALIZED VIEW longest_trip_1_min AS SELECT
         tpep_pickup_datetime,
         tpep_dropoff_datetime,
         taxi_zone_pu.Zone as pickup_zone,
