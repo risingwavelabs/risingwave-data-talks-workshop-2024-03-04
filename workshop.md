@@ -110,8 +110,7 @@ The first materialized view we create will be to count the total number of picku
 
 This is rather simple, we just need to filter the `PULocationID` to the airport IDs.
  
-TODO
-We can get the airport IDs by looking at the `taxi_zone` table:
+Recall `taxi_zone` contains metadata around the taxi zones, so we can use that to figure out the airport zones.
 ```sql
 describe taxi_zone;
 ```
@@ -201,6 +200,25 @@ EXPLAIN CREATE MATERIALIZED VIEW total_airport_pickups AS
                                            ^-- Scan from taxi_zone
 ```
 
+Go to your local [RisingWave Dashboard](http://localhost:5691) to see the query plan.
+
+Provided a simplified a simpler version here:
+
+![query_plan](./assets/mv1_plan.png)
+
+```sql
+CREATE MATERIALIZED VIEW total_airport_pickups AS
+    SELECT
+        count(*) AS cnt,
+        taxi_zone.Zone
+    FROM
+        trip_data
+            JOIN taxi_zone
+                 ON trip_data.PULocationID = taxi_zone.location_id
+    WHERE taxi_zone.Zone LIKE '%Airport'
+    GROUP BY taxi_zone.Zone;
+```
+
 ### Materialized View 2: Airport pickups from JFK Airport, 1 hour before the latest pickup
 
 We can adapt the previous MV to create a more specific one.
@@ -250,6 +268,10 @@ CREATE MATERIALIZED VIEW jfk_pickups_1hr_before AS
       AND taxi_zone.Zone = 'JFK Airport';
 ```
 
+Simplified query plan:
+
+![query_plan](./assets/mv2_plan.png)
+
 ### Materialized View 3: Top 10 busiest zones in the last 1 hour
 
 First we can write a query to get the counts of the pickups from each zone.
@@ -291,6 +313,8 @@ GROUP BY
 ORDER BY last_5_min_dropoff_cnt DESC
     LIMIT 10;
 ```
+
+TODO: Use this as real-time demo.
 
 ### Materialized View 4: Longest trips
 
