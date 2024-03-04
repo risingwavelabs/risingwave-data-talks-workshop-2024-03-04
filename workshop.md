@@ -314,11 +314,13 @@ ORDER BY last_5_min_dropoff_cnt DESC
     LIMIT 10;
 ```
 
+Didn't include the query plan this time, you may look at the dashboard.
+
 TODO: Use this as real-time demo.
 
 ### Materialized View 4: Longest trips
 
-Here, the concept is similar as the previous MV, but we are interested in the top 10 longest trips for the last 3 hours.
+Here, the concept is similar as the previous MV, but we are interested in the top 10 longest trips for the last 1 min.
 
 First we create the query to get the longest trips:
 ```sql
@@ -339,7 +341,7 @@ ORDER BY
     LIMIT 10;
 ```
 
-Then we can create a temporal filter to get the longest trips for the last 3 hours:
+Then we can create a temporal filter to get the longest trips for the last 1 minute:
 ```sql
     SELECT
         tpep_pickup_datetime,
@@ -354,11 +356,13 @@ Then we can create a temporal filter to get the longest trips for the last 3 hou
     JOIN taxi_zone as taxi_zone_do
         ON trip_data.DOLocationID = taxi_zone_do.location_id
     WHERE
-        trip_data.tpep_pickup_datetime > (NOW() - INTERVAL '3' HOUR)
+        trip_data.tpep_pickup_datetime > (NOW() - INTERVAL '1' MINUTE)
     ORDER BY
         trip_distance DESC
     LIMIT 10;
 ```
+
+Didn't include the query plan this time, you may look at the dashboard.
 
 ### Materialized View 5: Average Fare Amount vs Number of rides
 
