@@ -26,14 +26,14 @@ def run_query(query):
 @app.route('/get_busiest_zones', methods=['GET'])
 def get_busiest_zones():
     # Replace the following with your SQL query for busiest zones
-    query = 'SELECT * FROM busiest_zones_5_min'
+    query = 'SELECT * FROM busiest_zones_1_min'
     result = run_query(query)
     return jsonify(result)
 
 @app.route('/get_longest_trips', methods=['GET'])
 def get_longest_trips():
     # Replace the following with your SQL query for longest trips
-    query = 'SELECT * FROM longest_trip_1min'
+    query = 'SELECT * FROM longest_trip_1_min'
     result = run_query(query)
     return jsonify(result)
 
