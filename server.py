@@ -2,8 +2,10 @@
 
 from flask import Flask, jsonify
 import psycopg2
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Replace the following with your PostgreSQL database connection details
 db_connection_params = {

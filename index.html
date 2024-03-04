@@ -9,17 +9,33 @@
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  async function demo() {
-    const ctx = document.getElementById('myChart');
+  async function query_busiest_zones() {
+    const response = await fetch('http://127.0.0.1:5000/get_busiest_zones')
+    return await response.json();
+  }
+
+  async function chart_busiest_zones() {
 
     const data = {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      labels: [],
       datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 1],
+        label: 'Busiest Zones in past 5 mins',
+        data: [],
         borderWidth: 1
       }]
     }
+
+    async function refresh_data() {
+      const busiest_zones = await query_busiest_zones()
+      const zones = busiest_zones.map(data => data[0])
+      const counts = busiest_zones.map(data => data[1])
+      data.labels = zones
+      data.datasets.forEach((dataset) => {
+        dataset.data = counts
+      })
+    }
+
+    const ctx = document.getElementById('myChart');
 
     const chart = new Chart(ctx, {
       responsive: true,
@@ -33,24 +49,14 @@
         }
       }
     });
-    for (let i = 1; i < 100; i++) {
-      await sleep(100)
-      // chart.data.labels.push('New Label ' + i)
-      let prev_label = chart.data.labels[0]
-      chart.data.labels[0] = chart.data.labels[1]
-      chart.data.labels[1] = prev_label
 
-      chart.data.datasets.forEach((dataset) => {
-        dataset.data = dataset.data.map((value) => value + 1)
-        let prev = dataset.data[0]
-        dataset.data[0] = dataset.data[1]
-        dataset.data[1] = prev
-      })
-      // chart.update('none')
+    while(true) {
+      await sleep(100)
+      await refresh_data()
       chart.update()
     }
   }
 
-  demo()
+  chart_busiest_zones()
 </script>
 

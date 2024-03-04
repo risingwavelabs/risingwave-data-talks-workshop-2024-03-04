@@ -272,51 +272,49 @@ Simplified query plan:
 
 ![query_plan](./assets/mv2_plan.png)
 
-### Materialized View 3: Top 10 busiest zones in the last 5 minutes
+### Materialized View 3: Top 10 busiest zones in the last 1 minute
 
 First we can write a query to get the counts of the pickups from each zone.
 
 ```sql
 SELECT
     taxi_zone.Zone AS dropoff_zone,
-    count(*) AS last_5_min_dropoff_cnt
+    count(*) AS last_1_min_dropoff_cnt
 FROM
     trip_data
         JOIN taxi_zone
             ON trip_data.DOLocationID = taxi_zone.location_id
 GROUP BY
     taxi_zone.Zone
-ORDER BY last_5_min_dropoff_cnt DESC
+ORDER BY last_1_min_dropoff_cnt DESC
     LIMIT 10;
 ```
 
-Next, we can create a temporal filter to get the counts of the pickups from each zone in the last 5 minutes.
+Next, we can create a temporal filter to get the counts of the pickups from each zone in the last 1 minute.
 
 That has the form:
 ```sql
 WHERE
-    'timestamp-column' > (NOW() - INTERVAL '1' HOUR)
+    'timestamp-column' > (NOW() - INTERVAL '1' MINUTE)
 ```
 
 ```sql
-CREATE MATERIALIZED VIEW busiest_zones_5_min AS SELECT
+CREATE MATERIALIZED VIEW busiest_zones_1_min AS SELECT
     taxi_zone.Zone AS dropoff_zone,
-    count(*) AS last_5_min_dropoff_cnt
+    count(*) AS last_1_min_dropoff_cnt
 FROM
     trip_data
         JOIN taxi_zone
             ON trip_data.DOLocationID = taxi_zone.location_id
 WHERE
-    trip_data.tpep_dropoff_datetime > (NOW() - INTERVAL '5' MINUTE)
+    trip_data.tpep_dropoff_datetime > (NOW() - INTERVAL '1' MINUTE)
 GROUP BY
     taxi_zone.Zone
-ORDER BY last_5_min_dropoff_cnt DESC
+ORDER BY last_1_min_dropoff_cnt DESC
     LIMIT 10;
 ```
 
 Didn't include the query plan this time, you may look at the dashboard.
-
-TODO: Use this as real-time demo.
 
 ### Materialized View 4: Longest trips
 
