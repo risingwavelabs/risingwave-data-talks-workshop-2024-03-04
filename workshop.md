@@ -272,7 +272,7 @@ Simplified query plan:
 
 ![query_plan](./assets/mv2_plan.png)
 
-### Materialized View 3: Top 10 busiest zones in the last 1 hour
+### Materialized View 3: Top 10 busiest zones in the last 5 minutes
 
 First we can write a query to get the counts of the pickups from each zone.
 
@@ -290,7 +290,7 @@ ORDER BY last_5_min_dropoff_cnt DESC
     LIMIT 10;
 ```
 
-Next, we can create a temporal filter to get the counts of the pickups from each zone in the last 1 hour.
+Next, we can create a temporal filter to get the counts of the pickups from each zone in the last 5 minutes.
 
 That has the form:
 ```sql
@@ -299,7 +299,7 @@ WHERE
 ```
 
 ```sql
-SELECT
+CREATE MATERIALIZED VIEW busiest_zones_5_min AS SELECT
     taxi_zone.Zone AS dropoff_zone,
     count(*) AS last_5_min_dropoff_cnt
 FROM
@@ -307,7 +307,7 @@ FROM
         JOIN taxi_zone
             ON trip_data.DOLocationID = taxi_zone.location_id
 WHERE
-    trip_data.tpep_dropoff_datetime > (NOW() - INTERVAL '1' HOUR)
+    trip_data.tpep_dropoff_datetime > (NOW() - INTERVAL '5' MINUTE)
 GROUP BY
     taxi_zone.Zone
 ORDER BY last_5_min_dropoff_cnt DESC
@@ -320,7 +320,7 @@ TODO: Use this as real-time demo.
 
 ### Materialized View 4: Longest trips
 
-Here, the concept is similar as the previous MV, but we are interested in the top 10 longest trips for the last 1 min.
+Here, the concept is similar as the previous MV, but we are interested in the top 10 longest trips for the last 5 min.
 
 First we create the query to get the longest trips:
 ```sql
@@ -341,9 +341,9 @@ ORDER BY
     LIMIT 10;
 ```
 
-Then we can create a temporal filter to get the longest trips for the last 1 minute:
+Then we can create a temporal filter to get the longest trips for the last 5 minutes:
 ```sql
-    SELECT
+CREATE MATERIALIZED VIEW longest_trip_5min AS SELECT
         tpep_pickup_datetime,
         tpep_dropoff_datetime,
         taxi_zone_pu.Zone as pickup_zone,
@@ -356,7 +356,7 @@ Then we can create a temporal filter to get the longest trips for the last 1 min
     JOIN taxi_zone as taxi_zone_do
         ON trip_data.DOLocationID = taxi_zone_do.location_id
     WHERE
-        trip_data.tpep_pickup_datetime > (NOW() - INTERVAL '1' MINUTE)
+        trip_data.tpep_pickup_datetime > (NOW() - INTERVAL '5' MINUTE)
     ORDER BY
         trip_distance DESC
     LIMIT 10;
