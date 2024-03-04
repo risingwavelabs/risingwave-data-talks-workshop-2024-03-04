@@ -73,8 +73,8 @@ SELECT * FROM taxi_zone;
 We will also query for recent data, to ensure we are getting real-time data.
 
 ```sql
-SELECT pulocationid, dolocationid, tpep_pickup_datetime, tpep_dropoff_datetime \
- FROM trip_data WHERE tpep_dropoff_datetime > now() - interval '1 minute';
+SELECT pulocationid, dolocationid, tpep_pickup_datetime, tpep_dropoff_datetime
+FROM trip_data WHERE tpep_dropoff_datetime > now() - interval '1 minute';
 ```
 
 We can join this with `taxi_zone` to get the names of the zones.
@@ -99,7 +99,7 @@ CREATE MATERIALIZED VIEW latest_1min_trip_data AS
 
 We can now query the MV to see the latest data:
 ```sql
-SELECT * FROM latest_1min_trip_data order by tpep_dropoff_datetime
+SELECT * FROM latest_1min_trip_data order by tpep_dropoff_datetime DESC;
 ```
 
 Now we can start processing the data with Materialized Views, to provide analysis of the data stream!
@@ -109,6 +109,12 @@ Now we can start processing the data with Materialized Views, to provide analysi
 The first materialized view we create will be to count the total number of pickups at the airports.
 
 This is rather simple, we just need to filter the `PULocationID` to the airport IDs.
+ 
+TODO
+We can get the airport IDs by looking at the `taxi_zone` table:
+```sql
+describe taxi_zone;
+```
 
 Let's first get the zone names by looking at the `taxi_zone` table:
 ```sql
@@ -197,7 +203,7 @@ EXPLAIN CREATE MATERIALIZED VIEW total_airport_pickups AS
 
 ### Materialized View 2: Airport pickups from JFK Airport, 1 hour before the latest pickup
 
-We can build off from the previous MV to create a more specific one.
+We can adapt the previous MV to create a more specific one.
 We no longer need the `GROUP BY`, since we are only interested in 1 taxi zone, JFK Airport.
 
 ```sql
@@ -211,7 +217,7 @@ FROM
             ON trip_data.PULocationID = taxi_zone.location_id
 WHERE
         taxi_zone.Borough = 'Queens'
-  AND taxi_zone.Zone >= 'JFK Airport';
+  AND taxi_zone.Zone = 'JFK Airport';
 ```
 
 Next, we also want to keep track of the latest pickup
@@ -225,7 +231,7 @@ CREATE MATERIALIZED VIEW latest_jfk_pickup AS
                 ON trip_data.PULocationID = taxi_zone.location_id
     WHERE
         taxi_zone.Borough = 'Queens'
-      AND taxi_zone.Zone >= 'JFK Airport';
+      AND taxi_zone.Zone = 'JFK Airport';
 ```
 
 Finally, let's get the counts of the pickups from JFK Airport, 1 hour before the latest pickup
@@ -241,7 +247,7 @@ CREATE MATERIALIZED VIEW jfk_pickups_1hr_before AS
                 ON airport_pu.PULocationID = taxi_zone.location_id
     WHERE
         taxi_zone.Borough = 'Queens'
-      AND taxi_zone.Zone >= 'JFK Airport';
+      AND taxi_zone.Zone = 'JFK Airport';
 ```
 
 ### Materialized View 3: Top 10 busiest zones in the last 1 hour
@@ -267,7 +273,7 @@ Next, we can create a temporal filter to get the counts of the pickups from each
 That has the form:
 ```sql
 WHERE
-    'some-column' > (NOW() - INTERVAL '1' HOUR)
+    'timestamp-column' > (NOW() - INTERVAL '1' HOUR)
 ```
 
 ```sql
@@ -288,7 +294,7 @@ ORDER BY last_5_min_dropoff_cnt DESC
 
 ### Materialized View 4: Longest trips
 
-Here, the concept is similar as the previous MV, but we are interested in the longest trips for the last 3 hours.
+Here, the concept is similar as the previous MV, but we are interested in the top 10 longest trips for the last 3 hours.
 
 First we create the query to get the longest trips:
 ```sql
@@ -332,15 +338,15 @@ Then we can create a temporal filter to get the longest trips for the last 3 hou
 
 ### Materialized View 5: Average Fare Amount vs Number of rides
 
-How does `avg_fare_amt` change relative to number of rides per minute?
+How does `avg_fare_amt` change relative to number of pickups per minute?
 
 We use something known as a [tumble window function](https://docs.risingwave.com/docs/current/sql-function-time-window/#tumble-time-window-function), to compute this.
 
 ```sql
 CREATE MATERIALIZED VIEW avg_fare_amt AS
 SELECT
-    avg(fare_amount) AS avg_fare_amount_per_hour,
-    count(*) AS num_rides_per_hour,
+    avg(fare_amount) AS avg_fare_amount_per_min,
+    count(*) AS num_rides_per_min,
     window_start,
     window_end
 FROM
@@ -348,7 +354,7 @@ FROM
 GROUP BY
     window_start, window_end
 ORDER BY
-    num_rides_per_hour ASC;
+    num_rides_per_min ASC;
 ```
 
 For each window we compute the average fare amount and the number of rides.
@@ -371,16 +377,16 @@ We will create a Clickhouse table to store the data from the materialized views.
 
 ```sql
 CREATE TABLE avg_fare_amt(
-    avg_fare_amount_per_hour numeric,
-    num_rides_per_hour Int64,
+    avg_fare_amount_per_min numeric,
+    num_rides_per_min Int64,
 ) ENGINE = ReplacingMergeTree
-PRIMARY KEY (avg_fare_amount_per_hour, num_rides_per_hour);
+PRIMARY KEY (avg_fare_amount_per_min, num_rides_per_min);
 ```
 
 We will create a Clickhouse sink to sink the data from the materialized views to the Clickhouse table.
 
 ```sql
-CREATE SINK IF NOT EXISTS avg_fare_amt_sink AS SELECT avg_fare_amount_per_hour, num_rides_per_hour FROM avg_fare_amt
+CREATE SINK IF NOT EXISTS avg_fare_amt_sink AS SELECT avg_fare_amount_per_min, num_rides_per_min FROM avg_fare_amt
 WITH (
     connector = 'clickhouse',
     type = 'append-only',
@@ -400,8 +406,8 @@ clickhouse-client-term
 
 Run some queries in `Clickhouse`
 ```sql
-select max(avg_fare_amount_per_hour) from avg_fare_amt;
-select min(avg_fare_amount_per_hour) from avg_fare_amt;
+select max(avg_fare_amount_per_min) from avg_fare_amt;
+select min(avg_fare_amount_per_min) from avg_fare_amt;
 ```
 
 ## Summary

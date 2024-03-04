@@ -116,7 +116,7 @@ Before getting your hands dirty with the project, we will:
 
 ```bash
 # Check version of psql
-psql -v
+psql --version
 source commands.sh
 
 # Start the RW cluster

@@ -61,7 +61,7 @@ def send_records_to_kafka(env, records, real_time=False):
         if real_time:
 
             tpep_interval = record['tpep_dropoff_datetime'] - record['tpep_pickup_datetime']
-            tpep_dropoff_datetime = datetime.datetime.now(datetime.UTC)
+            tpep_dropoff_datetime = datetime.datetime.now(datetime.timezone.utc)
             tpep_pickup_datetime = tpep_dropoff_datetime - tpep_interval
             record['tpep_pickup_datetime'] = tpep_pickup_datetime
             record['tpep_dropoff_datetime'] = tpep_dropoff_datetime
