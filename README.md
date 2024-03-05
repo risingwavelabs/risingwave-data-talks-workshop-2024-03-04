@@ -74,8 +74,11 @@ https://tutorials.risingwave.com/docs/intro
 2. Python 3.7 or later
 3. `pip` and `virtualenv` for Python
 4. `psql` (I use PostgreSQL-14.9)
-5. Clone this repository: `git clone git@github.com:risingwavelabs/risingwave-data-talks-workshop-2024-03-04.git`
-6. `cd risingwave-data-talks-workshop-2024-03-04`
+5. Clone this repository:
+   ```sh
+   git clone git@github.com:risingwavelabs/risingwave-data-talks-workshop-2024-03-04.git
+   cd risingwave-data-talks-workshop-2024-03-04`
+   ```
 
 ## Note on the dataset
 
