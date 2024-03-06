@@ -77,11 +77,12 @@ https://tutorials.risingwave.com/docs/intro
 5. Clone this repository:
    ```sh
    git clone git@github.com:risingwavelabs/risingwave-data-talks-workshop-2024-03-04.git
-   cd risingwave-data-talks-workshop-2024-03-04`
+   cd risingwave-data-talks-workshop-2024-03-04
    ```
    Or, if you prefer HTTPS:
    ```sh
    git clone https://github.com/risingwavelabs/risingwave-data-talks-workshop-2024-03-04.git
+   cd risingwave-data-talks-workshop-2024-03-04
    ```
 
 ## Note on the dataset
