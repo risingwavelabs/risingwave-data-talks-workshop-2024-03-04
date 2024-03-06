@@ -12,6 +12,8 @@ source commands.sh
 clean-cluster
 # Start a new cluster
 start-cluster
+# wait for cluster to start
+sleep 5
 # Seed historical data instead of real-time data
 seed-kafka
 # Recreate trip data table
