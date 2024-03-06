@@ -49,6 +49,7 @@ Now we can let that run in the background.
 
 Let's open another terminal to create the trip_data table:
 ```bash
+source commands.sh
 psql -f risingwave-sql/table/trip_data.sql
 ```
 
