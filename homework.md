@@ -70,7 +70,7 @@ Options:
 
 ## Question 2
 
-Recreate the MV(s) in question 1, to also find the number of trips for the pair of taxi zones with the highest average trip time.
+Recreate the MV(s) in question 1, to also find the **number of trips** for the pair of taxi zones with the highest average trip time.
 
 Options:
 1. 5

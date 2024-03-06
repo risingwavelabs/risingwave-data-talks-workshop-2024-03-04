@@ -40,7 +40,9 @@ Let's start ingestion into RisingWave by running it:
 stream-kafka
 ```
 
-After that is complete, we have to also create the trip_data table:
+Now we can let that run in the background.
+
+Let's open another terminal to create the trip_data table:
 ```bash
 psql -f risingwave-sql/table/trip_data.sql
 ```
