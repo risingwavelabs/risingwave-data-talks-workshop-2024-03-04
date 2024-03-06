@@ -59,7 +59,7 @@ CREATE MATERIALIZED VIEW latest_dropoff_time AS
 
 ## Question 1
 
-Create a materialized view to compute the average, min and max trip time between each taxi zone.
+Create a materialized view to compute the average, min and max trip time **between each taxi zone**.
 
 From this MV, find the pair of taxi zones with the highest average trip time.
 You may need to use the [dynamic filter pattern](https://docs.risingwave.com/docs/current/sql-pattern-dynamic-filters/) for this.

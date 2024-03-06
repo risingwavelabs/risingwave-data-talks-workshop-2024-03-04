@@ -4,6 +4,11 @@
 
 Before beginning on this section, make sure you have setup your environment according to the [README](./README.md).
 
+Note that in every new terminal you should run the following command to load the environment variables:
+```bash
+source commands.sh
+```
+
 ## Setting up RisingWave with Docker Compose
 
 Reference: https://docs.risingwave.com/docs/current/risingwave-docker-compose/
