@@ -18,6 +18,11 @@ sleep 5
 seed-kafka
 # Recreate trip data table
 psql -f risingwave-sql/table/trip_data.sql
+# Wait for a while for the trip_data table to be populated.
+sleep 5
+# Check that you have 100K records in the trip_data table
+# You may rerun it if the count is not 100K
+psql -c "SELECT COUNT(*) FROM trip_data"
 ```
 
 ## Question 0

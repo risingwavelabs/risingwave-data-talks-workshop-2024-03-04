@@ -48,7 +48,10 @@ def create_kafka_topic(env, topic_name):
 def send_records_to_kafka(env, records, real_time=False):
     producer = env.producer
     records_count = len(records)
-    logging.info(f"Sending {records_count} records to Kafka")
+    if not real_time:
+        logging.info(f"Sending 100,000 records to Kafka")
+    else:
+        logging.info(f"Sending {records_count} records to Kafka")
     for i, (_, record) in enumerate(records.iterrows()):
         # Limit historical data to 100000 records, since cluster resource may be limited.
         if not real_time and i >= 100000:
@@ -79,7 +82,10 @@ def send_records_to_kafka(env, records, real_time=False):
             logging.info(f"Sent {i} records")
 
     producer.flush()
-    logging.info(f"Sent {records_count} records to Kafka")
+    if not real_time:
+        logging.info(f"Sent 100,000 records to Kafka")
+    else:
+        logging.info(f"Sent {records_count} records to Kafka")
 
 
 def send_parquet_records(env, parquet_file, real_time=False):
