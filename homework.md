@@ -88,8 +88,8 @@ Options:
 ## Question 3
 
 From the latest pickup time to 17 hours before, what are the top 3 busiest zones in terms of number of pickups?
-For example if the latest pickup time is 2020-01-01 12:00:00,
-then the query should return the top 3 busiest zones from 2019-12-31 19:00:00 to 2020-01-01 12:00:00.
+For example if the latest pickup time is 2020-01-01 17:00:00,
+then the query should return the top 3 busiest zones from 2020-01-01 00:00:00 to 2020-01-01 17:00:00.
 
 HINT: You can use [dynamic filter pattern](https://docs.risingwave.com/docs/current/sql-pattern-dynamic-filters/)
 to create a filter condition based on the latest pickup time.
