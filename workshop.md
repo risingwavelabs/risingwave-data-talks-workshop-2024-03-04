@@ -372,12 +372,18 @@ Didn't include the query plan this time, you may look at the dashboard.
 
 After this, you may run the visualization dashboard to see the data in real-time.
 
+Start the backend which queries RisingWave:
 ```bash
-# Run the server which queries RisingWave and feeds the data to our webpage
 ./server.py
-# Either Start the frontend (OSX)
+```
+
+Start the frontend, in a separate terminal, if you're on OSX:
+```bash
 open index.html
-# Or Start the frontend (Linux)
+```
+
+Start the frontend, in a separate terminal, if you're on linux:
+```bash
 xdg-open index.html
 ```
 
