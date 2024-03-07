@@ -377,6 +377,8 @@ Start the backend which queries RisingWave:
 ./server.py
 ```
 
+### Visualize Data from Materialized View 3 and 4
+
 Start the frontend, in a separate terminal, if you're on OSX:
 ```bash
 open index.html
