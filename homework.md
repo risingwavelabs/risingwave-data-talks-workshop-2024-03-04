@@ -4,6 +4,9 @@
 
 In order to get a static set of results, we will use historical data from the dataset.
 
+Before you start on the following steps, make sure you don't have `stream-kafka` running anymore.
+You can switch back to the terminal running `stream-kafka` and use `Ctrl+C` to stop it.
+
 Run the following commands:
 ```bash
 # Load the cluster op commands.
